@@ -1,3 +1,8 @@
 Rails.application.routes.draw do
-  resources :tables
+  # yep, it works this way
+  resources :orders, only: [:index]
+
+  resources :tables do
+    resources :orders, only: [:create]
+  end
 end
