@@ -1,5 +1,6 @@
 # Orders controller
 class OrdersController < ApplicationController
+  require 'order_payer'
   before_action :set_order, only: [:add, :pay]
 
   def index
@@ -30,18 +31,12 @@ class OrdersController < ApplicationController
   end
 
   def pay
-    amount = @order.total_amount
-    if amount == params[:amount]
-      @receipt = Receipt.new(order: @order,
-                             payment_method: params[:payment_method])
-      if @receipt.save
-        render json: @receipt, staus: 204 # no content
-      else
-        render json: @receipt.errors, status: :unprocessable_entity
-      end
+    service = OrderPayer.new(@order)
+    service.pay params[:amount].to_i, params[:payment_method]
+    if service.ok?
+      render json: service.receipt, root: true, staus: 201 # no content
     else
-      render json: { 'message' => "You didn't pay for the exact amount #{amount}" },
-             status: 422
+      render json: service.message, status: :unprocessable_entity
     end
   end
 
