@@ -4,8 +4,11 @@ gem 'sqlite3'
 gem 'puma', '~> 3.0'
 gem 'pry'
 
+gem 'kaminari'
+
 group :development, :test do
   gem 'byebug', platform: :mri
+  gem 'hirb'
 end
 
 group :test do

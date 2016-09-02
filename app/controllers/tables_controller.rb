@@ -1,9 +1,12 @@
+# control your table please
 class TablesController < ApplicationController
   before_action :set_table, only: [:show, :update, :destroy]
 
   # GET /tables
   def index
-    @tables = Table.all
+    page = params[:page]
+    per_page = 5
+    @tables = Table.page(page).per(per_page).all
 
     render json: @tables
   end
@@ -39,13 +42,14 @@ class TablesController < ApplicationController
   end
 
   private
-    # Use callbacks to share common setup or constraints between actions.
-    def set_table
-      @table = Table.find(params[:id])
-    end
 
-    # Only allow a trusted parameter "white list" through.
-    def table_params
-      params.require(:table).permit(:number, :seats)
-    end
+  # Use callbacks to share common setup or constraints between actions.
+  def set_table
+    @table = Table.find(params[:id])
+  end
+
+  # Only allow a trusted parameter "white list" through.
+  def table_params
+    params.require(:table).permit(:number, :seats)
+  end
 end
