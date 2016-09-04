@@ -5,6 +5,7 @@ gem 'puma', '~> 3.0'
 gem 'pry'
 
 gem 'kaminari'
+gem 'active_model_serializers', github: 'rails-api/active_model_serializers'
 
 group :development, :test do
   gem 'byebug', platform: :mri
