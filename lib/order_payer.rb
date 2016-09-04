@@ -11,6 +11,7 @@ class OrderPayer
       @receipt = Receipt.new(order: @order,
                              payment_method: payment_method)
       if @receipt.save
+        notify_user
         @status = :ok
       else
         @status = :error
@@ -24,5 +25,11 @@ class OrderPayer
 
   def ok?
     @status == :ok
+  end
+
+  private
+
+  def notify_user
+    OrderMailer.send_receipt(@order).deliver_later
   end
 end
